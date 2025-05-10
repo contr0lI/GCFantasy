@@ -28,46 +28,6 @@ function Navbar() {
   };
 
   const styles = {
-    nav: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      padding: '1rem',
-      background: 'var(--surface)',
-      borderBottom: '1px solid var(--border)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 100,
-    },
-    logoLink: {
-      color: 'var(--primary)',
-      fontSize: '1.2rem',
-      fontWeight: 'bold',
-      textShadow: '0 0 20px var(--primary)',
-    },
-    links: {
-      display: 'flex',
-      gap: '1.5rem',
-    },
-    link: {
-      color: 'var(--text)',
-      textDecoration: 'none',
-      transition: 'color 0.2s ease',
-    },
-    auth: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: '1rem',
-    },
-    authButton: {
-      background: 'transparent',
-      color: 'var(--text)',
-      border: '1px solid var(--primary)',
-      borderRadius: '12px',
-      padding: '8px 16px',
-      cursor: 'pointer',
-      transition: 'all 0.2s ease',
-    },
     modal: {
       position: 'fixed',
       top: '50%',
@@ -89,48 +49,31 @@ function Navbar() {
       bottom: 0,
       background: 'rgba(0, 0, 0, 0.7)',
       zIndex: 999,
-    },
-    closeButton: {
-      position: 'absolute',
-      top: '1rem',
-      right: '1rem',
-      background: 'transparent',
-      border: 'none',
-      color: 'var(--text-secondary)',
-      fontSize: '1.5rem',
-      cursor: 'pointer',
-      padding: '4px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '32px',
-      height: '32px',
-      borderRadius: '50%',
-    },
+    }
   };
 
   return (
-    <nav style={styles.nav}>
-      <Link to="/" style={styles.logoLink}>Fantasy Valorant GC</Link>
-      <div style={styles.links}>
-        {user && <Link to="/team" style={styles.link}>Mon Équipe</Link>}
-        <Link to="/leaderboard" style={styles.link}>Classement</Link>
-        {user && <Link to="/collection" style={styles.link}>Ma Collection</Link>}
-        <Link to="/rules" style={styles.link}>Règles</Link>
-        <Link to="/faq" style={styles.link}>FAQ</Link>
+    <nav className="nav">
+      <Link to="/" className="nav-link">Fantasy Valorant GC</Link>
+      <div className="nav-links">
+        {user && <Link to="/team" className="nav-link">Mon Équipe</Link>}
+        <Link to="/leaderboard" className="nav-link">Classement</Link>
+        {user && <Link to="/collection" className="nav-link">Ma Collection</Link>}
+        <Link to="/rules" className="nav-link">Règles</Link>
+        <Link to="/faq" className="nav-link">FAQ</Link>
       </div>
-      <div style={styles.auth}>
+      <div className="nav-links">
         {user ? (
           <>
             <span style={{ color: 'var(--text-secondary)' }}>{user.email}</span>
-            <button onClick={handleLogout} style={styles.authButton}>
+            <button onClick={handleLogout} className="auth-button">
               Déconnexion
             </button>
           </>
         ) : (
           <>
-            <button onClick={() => openModal('login')} style={styles.authButton}>Connexion</button>
-            <button onClick={() => openModal('signup')} style={styles.authButton}>Inscription</button>
+            <button onClick={() => openModal('login')} className="auth-button">Connexion</button>
+            <button onClick={() => openModal('signup')} className="auth-button">Inscription</button>
           </>
         )}
       </div>
@@ -139,7 +82,7 @@ function Navbar() {
         <>
           <div style={styles.overlay} onClick={closeModal} />
           <div style={styles.modal}>
-            <button onClick={closeModal} style={styles.closeButton}>×</button>
+            <button onClick={closeModal} className="close-button">×</button>
             {activeModal === 'login' ? (
               <Login isModal={true} onClose={closeModal} />
             ) : (
