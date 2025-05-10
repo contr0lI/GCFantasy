@@ -8,31 +8,27 @@ import HomePage from '@/pages/HomePage';
 import FaqPage from '@/pages/FaqPage';
 import RulesPage from '@/pages/RulesPage';
 
-const appStyles = {
-  container: {
-    backgroundColor: '#0a0a0a', // Dark background
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: '20px',
-    color: '#fff',
-  },
-  content: {
-    maxWidth: '1200px',
-    width: '100%',
-    padding: '20px',
-  },
-};
-
 function App() {
   return (
     <UserProvider>
       <Router>
-        <div style={appStyles.container}>
+        <div style={{
+          backgroundColor: 'var(--background)',
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column'
+        }}>
           <Navbar />
-          <div style={appStyles.content}>
+          <main style={{
+            flex: 1,
+            width: '100%',
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: '20px',
+            '@media (max-width: 768px)': {
+              padding: '16px'
+            }
+          }}>
             <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/team" element={<PrivateRoute><TeamSelection /></PrivateRoute>} />
@@ -41,7 +37,7 @@ function App() {
               <Route path="/rules" element={<RulesPage />} />
               <Route path="*" element={<HomePage />} />
             </Routes>
-          </div>
+          </main>
         </div>
       </Router>
     </UserProvider>

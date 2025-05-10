@@ -8,14 +8,15 @@ import Signup from '@/pages/Signup';
 function Navbar() {
   const { user } = useUser();
   const navigate = useNavigate();
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showSignupModal, setShowSignupModal] = useState(false);
+  const [activeModal, setActiveModal] = useState(null);
 
-  const openLoginModal = () => setShowLoginModal(true);
-  const closeLoginModal = () => setShowLoginModal(false);
+  const openModal = (modalType) => {
+    setActiveModal(modalType);
+  };
 
-  const openSignupModal = () => setShowSignupModal(true);
-  const closeSignupModal = () => setShowSignupModal(false);
+  const closeModal = () => {
+    setActiveModal(null);
+  };
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
@@ -24,6 +25,107 @@ function Navbar() {
     } else {
       navigate('/login');
     }
+  };
+
+  const styles = {
+    nav: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: '1rem',
+      background: 'var(--surface)',
+      borderBottom: '1px solid var(--border)',
+      position: 'sticky',
+      top: 0,
+      zIndex: 100,
+    },
+    mobileNav: {
+      '@media (max-width: 768px)': {
+        flexDirection: 'column',
+        gap: '1rem',
+      }
+    },
+    logoLink: {
+      color: 'var(--primary)',
+      fontSize: '1.2rem',
+      fontWeight: 'bold',
+      textShadow: '0 0 20px var(--primary)',
+    },
+    links: {
+      display: 'flex',
+      gap: '1.5rem',
+      '@media (max-width: 768px)': {
+        flexDirection: 'column',
+        alignItems: 'center',
+      }
+    },
+    link: {
+      color: 'var(--text)',
+      textDecoration: 'none',
+      transition: 'color 0.2s ease',
+      '&:hover': {
+        color: 'var(--primary)',
+      }
+    },
+    auth: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '1rem',
+    },
+    authButton: {
+      background: 'transparent',
+      color: 'var(--text)',
+      border: '1px solid var(--primary)',
+      borderRadius: '12px',
+      padding: '8px 16px',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease',
+      '&:hover': {
+        background: 'var(--primary)',
+      }
+    },
+    modal: {
+      position: 'fixed',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      background: 'var(--surface)',
+      borderRadius: '16px',
+      padding: '2rem',
+      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+      zIndex: 1000,
+      width: '90%',
+      maxWidth: '400px',
+    },
+    overlay: {
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'rgba(0, 0, 0, 0.7)',
+      zIndex: 999,
+    },
+    closeButton: {
+      position: 'absolute',
+      top: '1rem',
+      right: '1rem',
+      background: 'transparent',
+      border: 'none',
+      color: 'var(--text-secondary)',
+      fontSize: '1.5rem',
+      cursor: 'pointer',
+      padding: '4px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '32px',
+      height: '32px',
+      borderRadius: '50%',
+      '&:hover': {
+        background: 'var(--border)',
+      }
+    },
   };
 
   return (
@@ -39,114 +141,34 @@ function Navbar() {
       <div style={styles.auth}>
         {user ? (
           <>
-            <span style={styles.userEmail}>{user.email}</span>
-            <button onClick={handleLogout} style={styles.logoutButton}>
+            <span style={{ color: 'var(--text-secondary)' }}>{user.email}</span>
+            <button onClick={handleLogout} style={styles.authButton}>
               Déconnexion
             </button>
           </>
         ) : (
           <>
-            <button onClick={openLoginModal} style={styles.authButton}>Connexion</button>
-            <button onClick={openSignupModal} style={styles.authButton}>Inscription</button>
+            <button onClick={() => openModal('login')} style={styles.authButton}>Connexion</button>
+            <button onClick={() => openModal('signup')} style={styles.authButton}>Inscription</button>
           </>
         )}
       </div>
 
-      {showLoginModal && (
-        <div style={styles.modal}>
-          <button onClick={closeLoginModal} style={styles.closeButton}>×</button>
-          <Login isModal={true} onClose={closeLoginModal} />
-        </div>
-      )}
-
-      {showSignupModal && (
-        <div style={styles.modal}>
-          <button onClick={closeSignupModal} style={styles.closeButton}>×</button>
-          <Signup isModal={true} onClose={closeSignupModal} />
-        </div>
+      {activeModal && (
+        <>
+          <div style={styles.overlay} onClick={closeModal} />
+          <div style={styles.modal}>
+            <button onClick={closeModal} style={styles.closeButton}>×</button>
+            {activeModal === 'login' ? (
+              <Login isModal={true} onClose={closeModal} />
+            ) : (
+              <Signup isModal={true} onClose={closeModal} />
+            )}
+          </div>
+        </>
       )}
     </nav>
   );
 }
-
-const styles = {
-  nav: {
-    display: 'flex',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    padding: '1rem',
-    background: '#181818', // Dark background
-    color: '#fff',
-  },
-  logoLink: {
-    color: '#00f0ff', // Neon cyan
-    textDecoration: 'none',
-    fontSize: '1.2rem',
-    fontWeight: 'bold',
-    textShadow: '0 0 5px #00f0ff, 0 0 10px #00f0ff',
-  },
-  links: {
-    display: 'flex',
-  },
-  link: {
-    color: '#99ff99', // Neon green
-    textDecoration: 'none',
-    margin: '0 10px',
-    textShadow: '0 0 3px #99ff99',
-  },
-  auth: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  authButton: {
-    backgroundColor: 'transparent',
-    color: '#ff66ff', // Neon magenta
-    border: '1px solid #ff66ff',
-    borderRadius: '5px',
-    padding: '8px 12px',
-    cursor: 'pointer',
-    marginLeft: '10px',
-    textShadow: '0 0 3px #ff66ff',
-    transition: 'all 0.3s ease',
-  },
-  logoutButton: {
-    backgroundColor: 'transparent',
-    color: '#ffff66', // Neon yellow
-    border: '1px solid #ffff66',
-    borderRadius: '5px',
-    padding: '8px 12px',
-    cursor: 'pointer',
-    marginLeft: '10px',
-    textShadow: '0 0 3px #ffff66',
-    transition: 'all 0.3s ease',
-  },
-  userEmail: {
-    marginRight: '15px',
-    color: '#fff',
-  },
-  modal: {
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    background: '#181818',
-    color: '#fff',
-    border: '1px solid #00f0ff',
-    borderRadius: '8px',
-    padding: '20px',
-    boxShadow: '0 0 20px rgba(0, 240, 255, 0.5)',
-    zIndex: 1000,
-  },
-  closeButton: {
-    position: 'absolute',
-    top: '5px',
-    right: '10px',
-    border: 'none',
-    background: 'transparent',
-    color: '#fff',
-    fontSize: '1.5em',
-    cursor: 'pointer',
-  },
-};
 
 export default Navbar;
