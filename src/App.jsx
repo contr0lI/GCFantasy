@@ -24,10 +24,7 @@ function App() {
             width: '100%',
             maxWidth: '1200px',
             margin: '0 auto',
-            padding: '20px',
-            '@media (max-width: 768px)': {
-              padding: '16px'
-            }
+            padding: '20px'
           }}>
             <Routes>
               <Route path="/" element={<HomePage />} />

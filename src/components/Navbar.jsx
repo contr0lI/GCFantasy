@@ -39,12 +39,6 @@ function Navbar() {
       top: 0,
       zIndex: 100,
     },
-    mobileNav: {
-      '@media (max-width: 768px)': {
-        flexDirection: 'column',
-        gap: '1rem',
-      }
-    },
     logoLink: {
       color: 'var(--primary)',
       fontSize: '1.2rem',
@@ -54,18 +48,11 @@ function Navbar() {
     links: {
       display: 'flex',
       gap: '1.5rem',
-      '@media (max-width: 768px)': {
-        flexDirection: 'column',
-        alignItems: 'center',
-      }
     },
     link: {
       color: 'var(--text)',
       textDecoration: 'none',
       transition: 'color 0.2s ease',
-      '&:hover': {
-        color: 'var(--primary)',
-      }
     },
     auth: {
       display: 'flex',
@@ -80,9 +67,6 @@ function Navbar() {
       padding: '8px 16px',
       cursor: 'pointer',
       transition: 'all 0.2s ease',
-      '&:hover': {
-        background: 'var(--primary)',
-      }
     },
     modal: {
       position: 'fixed',
@@ -122,9 +106,6 @@ function Navbar() {
       width: '32px',
       height: '32px',
       borderRadius: '50%',
-      '&:hover': {
-        background: 'var(--border)',
-      }
     },
   };
 
